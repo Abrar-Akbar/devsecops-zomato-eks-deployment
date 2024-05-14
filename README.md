@@ -299,6 +299,55 @@ GitHub Actions is a powerful and versatile automation platform that seamlessly i
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    [Continued...]
+
+    name: Update kubeconfig
+      run: aws eks --region us-east-1 update-kubeconfig --name Zomato-EKS-Cluster
+    - name: Deploy to Kubernetes
+      run: kubectl apply -f deployment-service.yml
+    - name: Send a Slack Notification
+      if: always()
+      uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+        channel: '#githubactions-eks'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+3. Commit the changes to GitHub.
+
+4. Now run this command for reference to ensure all resources are created:
+    ```
+    kubectl get all
+    ```
+
+5. This will create a Classic Load Balancer on AWS.
+
+6. Copy and Paste the DNS name on your favorite browser.
+
+7. Access the application on port 3000 of the EC2 instance. Note: Allow port 3000 in the Security Group of the EC2 server.
+
+### Step 8: Clean Up Resources
+
+This is very Simple in the Cloned Repo Run.
+
+i. To destroy the EKS Cluster:
+
+    ```bash
+    cd EKS-TF/
+    terraform destroy -var-file=variables.tfvars --auto-approve
+    ```
+
+ii. To destroy the GitHub EC2 Server:
+
+    ```bash
+    cd GitHub-Server-TF/
+    terraform destroy -var-file=variables.tfvars --auto-approve
+    ```
+
+That's it! You've successfully deployed a Zomato clone application onto Amazon EKS using DevSecOps principles with GitHub Actions and Terraform.
+
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
