@@ -175,24 +175,24 @@ GitHub Actions is a powerful and versatile automation platform that seamlessly i
           - name: Docker Build and push
             run: |
               docker build -t zomato .
-              docker tag zomato sreedhar8897/zomato:latest
+              docker tag zomato abrarakbar623/zomato:latest
               docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-              docker push sreedhar8897/zomato:latest
+              docker push abrarakbar623/zomato:latest
             env:
               DOCKER_CLI_ACI: 1
           - name: Image scan
-            run: trivy image sreedhar8897/zomato:latest > trivyimage.txt
+            run: trivy image abrarakbar623/zomato:latest > trivyimage.txt
 
       deploy:
         needs: build-analyze-scan
         runs-on: [self-hosted]
         steps:
           - name: docker pull image
-            run: docker pull sreedhar8897/zomato:latest
+            run: docker pull abrarakbar623/zomato:latest
           - name: Image scan
-            run: trivy image sreedhar8897/zomato:latest > trivyimagedeploy.txt
+            run: trivy image abrarakbar623/zomato:latest > trivyimagedeploy.txt
           - name: Deploy to container
-            run: docker run -d --name zomato -p 3000:3000 sreedhar8897/zomato:latest
+            run: docker run -d --name zomato -p 3000:3000 abrarakbar623/zomato:latest
     ```
 
 7. Let’s start the runner:
@@ -273,7 +273,7 @@ GitHub Actions is a powerful and versatile automation platform that seamlessly i
         spec:
           containers:
           - name: zomato
-            image: sreedhar8897/zomato:latest
+            image: abrarakbar623/zomato:latest
             ports:
             - containerPort: 3000  # Use port 3000
 
