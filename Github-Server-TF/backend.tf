@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "my-reddit-bucket-1"
+    bucket         = "my-terra-bucket-1"
     region         = "us-east-1"
     key            = "ZomatoApp-Clone/Github-Server-TF/terraform.tfstate"
     dynamodb_table = "Lock-Files"
